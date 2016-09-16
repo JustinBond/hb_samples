@@ -61,11 +61,8 @@ class NewTopic(Resource):
         uid = models.User.get_or_create(Session, args['access_token'], False)
 
         success, snap = models.Game.get_snap(Session, args['game_id'])
-
         applogic.has_right_to_submit_topic(uid, snap)
-
         applogic.is_valid_haiku(args['haiku'])
-
         new_game_snap = models.Game.clone(Session,
                                           args['game_id'],
                                           uid,
@@ -102,9 +99,7 @@ class Vote(Resource):
         uid = models.User.get_or_create(Session, args['access_token'], False)
 
         success, snap = models.Game.get_snap(Session, args['game_id'])
-
         applogic.has_right_to_vote(uid, snap, args['vote'])
-
         new_snap = models.PlayerInfo.set_vote(Session, uid, args['game_id'],
                                                             args['vote'])
 
@@ -144,11 +139,8 @@ class NameGame(Resource):
         args = self.games_parser.parse_args()
 
         uid = models.User.get_or_create(Session, args['access_token'], False)
-
         _, snap = models.Game.get_snap(Session, args['game_id'])
-
         applogic.is_valid_player(uid, snap)
-
         success, message = models.Game.name_game(Session,
                                                  args['game_id'],
                                                  args['name'])
@@ -176,14 +168,10 @@ class Write(Resource):
         args = self.games_parser.parse_args()
         uid = models.User.get_or_create(Session, args['access_token'], False)
 
-
         applogic.is_valid_haiku(args['poem'])
-
         success, snap = models.Game.get_snap(Session, args['game_id'])
-
         applogic.has_right_to_write(uid, snap)
         applogic.is_valid_haiku(args['poem'])
-
         new_snap = models.PlayerInfo.write(Session,
                                            uid,
                                            args['game_id'],
@@ -228,9 +216,7 @@ class Remove(Resource):
         uid = models.User.get_or_create(Session, args['access_token'], False)
 
         _, snap = models.Game.get_snap(Session, args['game_id'])
-
         applogic.is_valid_player(uid, snap)
-
         _, message = models.Game.remove_player(Session, uid, args['game_id'])
 
         reponse = {
@@ -329,7 +315,6 @@ class ChangeUserName(Resource):
         uid = models.User.get_or_create(Session, access_token, False)
 
         _, profile = models.User._get_profile_from_facebook(access_token)
-
         message = models.User.change_name(Session, uid, profile['name'])
 
         response = {
